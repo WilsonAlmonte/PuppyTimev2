@@ -13,4 +13,6 @@
     <string name="password">Password</string>
     <string name="name">Name</string>
     <string name="email" translatable="false">Email</string>
+    <string name="authentication_error">The combination of email and password is incorrect</string>
+    <string name="generic_error">An unexpected error has occurred</string>
 </resources>

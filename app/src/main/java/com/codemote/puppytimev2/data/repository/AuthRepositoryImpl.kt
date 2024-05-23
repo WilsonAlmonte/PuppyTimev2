@@ -1,5 +1,7 @@
 package com.codemote.puppytimev2.data.repository
 
+import android.app.Application
+import com.codemote.puppytimev2.R
 import com.codemote.puppytimev2.common.AuthRemoteResult
 import com.codemote.puppytimev2.common.AuthState
 import com.codemote.puppytimev2.common.AuthenticationError
@@ -25,6 +27,7 @@ import kotlinx.coroutines.withContext
 
 class AuthRepositoryImpl(
     private val firebaseAuth: FirebaseAuth,
+    private val appContext: Application,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : AuthRepository {
     override suspend fun authenticateUser(
@@ -35,9 +38,9 @@ class AuthRepositoryImpl(
             firebaseAuth.signInWithEmailAndPassword(email, password).await()
             return@withContext SuccessAuthRemote
         } catch (e: FirebaseAuthInvalidCredentialsException) {
-            return@withContext AuthenticationError(message = "The combination of email and password is incorrect")
+            return@withContext AuthenticationError(message = appContext.getString(R.string.authentication_error))
         } catch (e: Exception) {
-            return@withContext UnknownError(message = "An unexpected error has occurred")
+            return@withContext UnknownError(message = appContext.getString(R.string.generic_error))
         }
     }
 
@@ -46,7 +49,7 @@ class AuthRepositoryImpl(
             firebaseAuth.signOut()
             return SuccessAuthRemote
         } catch (e: Exception) {
-            return UnknownError(message = "An error occurred")
+            return UnknownError(message = appContext.getString(R.string.generic_error))
         }
     }
 
@@ -81,9 +84,8 @@ class AuthRepositoryImpl(
         email: String,
         name: String,
         password: String
-    ): AuthRemoteResult {
+    ): AuthRemoteResult = withContext(ioDispatcher) {
         try {
-            println(password)
             val newUser = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             if (newUser.user != null) {
                 val profileUpdates = userProfileChangeRequest {
@@ -91,11 +93,11 @@ class AuthRepositoryImpl(
                 }
                 val user = firebaseAuth.currentUser
                 user!!.updateProfile(profileUpdates).await()
-                return SuccessAuthRemote
+                return@withContext SuccessAuthRemote
             }
-            throw Exception("User is null")
+            throw Exception(appContext.getString(R.string.generic_error))
         } catch (e: Exception) {
-            return UnknownError(message = e.message ?: "")
+            return@withContext UnknownError(message = e.message ?: "")
         }
     }
 }

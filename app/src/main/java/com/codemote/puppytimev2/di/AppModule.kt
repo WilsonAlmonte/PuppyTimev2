@@ -1,5 +1,6 @@
 package com.codemote.puppytimev2.di
 
+import android.app.Application
 import com.codemote.puppytimev2.data.repository.AuthRepositoryImpl
 import com.codemote.puppytimev2.domain.repository.AuthRepository
 import com.google.firebase.Firebase
@@ -16,7 +17,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(): AuthRepository {
-        return AuthRepositoryImpl(firebaseAuth = Firebase.auth)
+    fun provideAuthRepository(appContext: Application): AuthRepository {
+        return AuthRepositoryImpl(firebaseAuth = Firebase.auth, appContext = appContext)
     }
 }

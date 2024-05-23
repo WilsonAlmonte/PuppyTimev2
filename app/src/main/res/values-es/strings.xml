@@ -10,4 +10,6 @@
     <string name="sign_up_layout_subtitle">Déjanos saber mas de ti</string>
     <string name="password">Contraseña</string>
     <string name="name">Nombre</string>
+    <string name="authentication_error">La combinación de contraseña e email es incorrecta</string>
+    <string name="generic_error">Ha ocurrido un error</string>
 </resources>
