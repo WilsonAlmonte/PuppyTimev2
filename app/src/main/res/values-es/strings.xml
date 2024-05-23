@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="get_started_button_text">Comenzemos</string>
+    <string name="sign_in_button_text">Iniciar Sesión</string>
+    <string name="sub_title">Registrate y se el mejor dueño</string>
+    <string name="sign_out">Cerrar Sesión</string>
+    <string name="login_layout_title">Bienvenido!</string>
+    <string name="login_layout_subtitle">Continua con nosotros!</string>
+    <string name="signup_layout_title">Buena elección!</string>
+    <string name="sign_up_layout_subtitle">Déjanos saber mas de ti</string>
+    <string name="password">Contraseña</string>
+    <string name="name">Nombre</string>
+</resources>

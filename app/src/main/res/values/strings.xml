@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">PuppyTime</string>
+    <string name="app_name" translatable="false">PuppyTime</string>
     <string name="get_started_button_text">Get Started</string>
     <string name="sign_in_button_text">Sign In</string>
     <string name="sub_title">Sign up and be the best owner!</string>
-    <string name="app_name_part_1">Puppy</string>
-    <string name="app_name_part_2">Time</string>
+    <string name="app_name_part_1" translatable="false">Puppy</string>
+    <string name="app_name_part_2" translatable="false">Time</string>
     <string name="sign_out">Sign Out</string>
     <string name="login_layout_title">Welcome Back!</string>
     <string name="login_layout_subtitle">Continue your puppy journey</string>
@@ -12,5 +12,5 @@
     <string name="sign_up_layout_subtitle">Let us know more about you</string>
     <string name="password">Password</string>
     <string name="name">Name</string>
-    <string name="email">Email</string>
+    <string name="email" translatable="false">Email</string>
 </resources>
