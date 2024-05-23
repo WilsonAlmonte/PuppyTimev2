@@ -1,4 +1,4 @@
-package com.codemote.puppytimev2.presentation.ui.theme
+package com.codemote.puppytimev2.ui.theme
 
 import android.app.Activity
 import android.os.Build
