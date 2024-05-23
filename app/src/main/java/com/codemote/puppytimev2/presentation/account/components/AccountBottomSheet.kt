@@ -33,6 +33,7 @@ import com.codemote.puppytimev2.ui.atoms.PuppyPrimaryButton
 fun AccountBottomSheet(
     showBottomSheet: Boolean,
     onDismiss: () -> Unit,
+    unknownError: String,
     sheetState: SheetState,
     content: @Composable () -> Unit
 ) {
@@ -53,7 +54,17 @@ fun AccountBottomSheet(
             },
             sheetState = sheetState
         ) {
-            content()
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(start = 24.dp, end = 24.dp)
+                    .fillMaxSize(),
+            ) {
+                content()
+                if (unknownError.isNotEmpty()) {
+                    Text(text = unknownError, color = MaterialTheme.colorScheme.error)
+                }
+            }
         }
     }
 }
@@ -68,57 +79,50 @@ fun LoginLayout(
     onSignInClick: () -> Unit,
     operationIsLoading: Boolean
 ) {
-    Column(
+    Text(
         modifier = Modifier
-            .padding(start = 24.dp, end = 24.dp)
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
+            .fillMaxWidth()
+            .padding(bottom = 0.dp, top = 16.dp),
+        text = stringResource(R.string.login_layout_title),
+        style = MaterialTheme.typography.titleLarge.copy(
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold
+        )
+    )
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 8.dp),
+        text = stringResource(R.string.login_layout_subtitle),
+        style = MaterialTheme.typography.bodyLarge.copy(
+            textAlign = TextAlign.Center,
+        )
+    )
+    EmailTextField(
+        enabled = !operationIsLoading,
+        userEmailInputState = userEmailInputState,
+        userEmail = userEmail,
+        onValueChange = onValueChange
+    )
+    PasswordTextField(
+        enabled = !operationIsLoading,
+        userPasswordInputState = userPasswordInputState,
+        userPassword = userPassword,
+        onValueChange = onValueChange
+    )
+    if (operationIsLoading) {
+        CircularProgressIndicator(
+            strokeWidth = 5.dp,
+            trackColor = MaterialTheme.colorScheme.secondary,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 0.dp, top = 16.dp),
-            text = stringResource(R.string.login_layout_title),
-            style = MaterialTheme.typography.titleLarge.copy(
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold
-            )
+                .width(100.dp)
         )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp),
-            text = stringResource(R.string.login_layout_subtitle),
-            style = MaterialTheme.typography.bodyLarge.copy(
-                textAlign = TextAlign.Center,
-            )
+    } else {
+        PuppyPrimaryButton(
+            buttonText = stringResource(id = R.string.sign_in_button_text),
+            onClick = onSignInClick
         )
-        EmailTextField(
-            enabled = !operationIsLoading,
-            userEmailInputState = userEmailInputState,
-            userEmail = userEmail,
-            onValueChange = onValueChange
-        )
-        PasswordTextField(
-            enabled = !operationIsLoading,
-            userPasswordInputState = userPasswordInputState,
-            userPassword = userPassword,
-            onValueChange = onValueChange
-        )
-        if (operationIsLoading) {
-            CircularProgressIndicator(
-                strokeWidth = 5.dp,
-                trackColor = MaterialTheme.colorScheme.secondary,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .width(100.dp)
-            )
-        } else {
-            PuppyPrimaryButton(
-                buttonText = stringResource(id = R.string.sign_in_button_text),
-                onClick = onSignInClick
-            )
-        }
     }
 }
 
@@ -133,50 +137,45 @@ fun SignUpLayout(
     onGetStartedClick: () -> Unit,
     operationIsLoading: Boolean
 ) {
-    Column(
-        modifier = Modifier
-            .padding(start = 24.dp, end = 24.dp)
-            .fillMaxSize(),
-    ) {
-        Text(
-            modifier = Modifier
-                .fillMaxWidth(),
-            text = stringResource(R.string.signup_layout_title),
-            style = MaterialTheme.typography.titleLarge.copy(
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold
-            )
-        )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp),
-            text = stringResource(R.string.sign_up_layout_subtitle),
-            style = MaterialTheme.typography.bodyLarge.copy(
-                textAlign = TextAlign.Center,
-            )
-        )
-        NameTextField(
-            userName = userName,
-            onValueChange = onValueChange,
-            enabled = !operationIsLoading
-        )
-        EmailTextField(
-            userEmailInputState = userEmailInputState,
-            userEmail = userEmail,
-            onValueChange = onValueChange,
-            enabled = !operationIsLoading
-        )
-        PasswordTextField(
-            userPasswordInputState = userPasswordInputState,
-            userPassword = userPassword,
-            onValueChange = onValueChange,
-            enabled = !operationIsLoading
 
+    Text(
+        modifier = Modifier
+            .fillMaxWidth(),
+        text = stringResource(R.string.signup_layout_title),
+        style = MaterialTheme.typography.titleLarge.copy(
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold
         )
-        PuppyPrimaryButton(
-            buttonText = stringResource(id = R.string.get_started_button_text),
-            onClick = onGetStartedClick
+    )
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 8.dp),
+        text = stringResource(R.string.sign_up_layout_subtitle),
+        style = MaterialTheme.typography.bodyLarge.copy(
+            textAlign = TextAlign.Center,
         )
-    }
+    )
+    NameTextField(
+        userName = userName,
+        onValueChange = onValueChange,
+        enabled = !operationIsLoading
+    )
+    EmailTextField(
+        userEmailInputState = userEmailInputState,
+        userEmail = userEmail,
+        onValueChange = onValueChange,
+        enabled = !operationIsLoading
+    )
+    PasswordTextField(
+        userPasswordInputState = userPasswordInputState,
+        userPassword = userPassword,
+        onValueChange = onValueChange,
+        enabled = !operationIsLoading
+
+    )
+    PuppyPrimaryButton(
+        buttonText = stringResource(id = R.string.get_started_button_text),
+        onClick = onGetStartedClick
+    )
 }

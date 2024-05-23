@@ -88,7 +88,8 @@ fun AccountScreen(
         AccountBottomSheet(
             accountUiState.showAccountBottomSheet,
             onDismiss = { accountViewModel.toggleAccountBottomSheet() },
-            sheetState = sheetState
+            sheetState = sheetState,
+            unknownError = accountUiState.unKnownError ?: ""
         ) {
             when (accountUiState.accountBottomSheetType) {
                 AccountBottomSheetType.LOGIN -> {
