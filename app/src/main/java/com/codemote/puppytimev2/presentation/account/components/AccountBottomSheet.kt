@@ -62,7 +62,11 @@ fun AccountBottomSheet(
             ) {
                 content()
                 if (unknownError.isNotEmpty()) {
-                    Text(text = unknownError, color = MaterialTheme.colorScheme.error)
+                    Text(
+                        text = unknownError,
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.padding(top = 16.dp)
+                    )
                 }
             }
         }
@@ -92,7 +96,7 @@ fun LoginLayout(
     Text(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 8.dp),
+            .padding(bottom = 16.dp),
         text = stringResource(R.string.login_layout_subtitle),
         style = MaterialTheme.typography.bodyLarge.copy(
             textAlign = TextAlign.Center,

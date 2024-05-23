@@ -5,7 +5,7 @@ data class AccountUiState(
     val accountBottomSheetType: AccountBottomSheetType = AccountBottomSheetType.NONE,
     val userEmailInputState: InputState = InputState(),
     val userPasswordInputState: InputState = InputState(),
-    val unKnownError: String? = null,
+    val accountScreenError: String? = null,
     val isLoading: Boolean = false
 )
 

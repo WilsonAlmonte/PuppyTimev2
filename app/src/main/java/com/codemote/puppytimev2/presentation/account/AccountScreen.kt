@@ -89,7 +89,7 @@ fun AccountScreen(
             accountUiState.showAccountBottomSheet,
             onDismiss = { accountViewModel.toggleAccountBottomSheet() },
             sheetState = sheetState,
-            unknownError = accountUiState.unKnownError ?: ""
+            unknownError = accountUiState.accountScreenError ?: ""
         ) {
             when (accountUiState.accountBottomSheetType) {
                 AccountBottomSheetType.LOGIN -> {
@@ -118,7 +118,7 @@ fun AccountScreen(
                         userPassword = accountViewModel.userPassword,
                         userEmailInputState = accountUiState.userEmailInputState,
                         userPasswordInputState = accountUiState.userPasswordInputState,
-                        onGetStartedClick = {},
+                        onGetStartedClick = { accountViewModel.createUser {} },
                         operationIsLoading = accountUiState.isLoading,
                         onValueChange = { value, type ->
                             accountViewModel.onInputChange(
