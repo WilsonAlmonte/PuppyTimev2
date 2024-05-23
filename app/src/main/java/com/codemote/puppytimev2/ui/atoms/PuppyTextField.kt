@@ -1,6 +1,7 @@
 package com.codemote.puppytimev2.ui.atoms
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -10,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun PuppyTextField(
@@ -42,7 +44,7 @@ fun PuppyTextField(
         visualTransformation = visualTransformation,
         supportingText = {
             if (isError) {
-                Text(errorMessage)
+                Text(errorMessage, modifier = Modifier.padding(bottom = 8.dp))
             }
         },
         modifier = modifier
