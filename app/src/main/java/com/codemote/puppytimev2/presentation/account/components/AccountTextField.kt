@@ -9,10 +9,12 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.codemote.puppytimev2.R
 import com.codemote.puppytimev2.presentation.account.AccountInputType
 import com.codemote.puppytimev2.presentation.account.InputState
 import com.codemote.puppytimev2.ui.atoms.PuppyTextField
@@ -25,7 +27,7 @@ fun EmailTextField(
     enabled: Boolean,
 ) {
     PuppyTextField(
-        labelText = "Email",
+        labelText = stringResource(R.string.email),
         value = userEmail,
         enabled = enabled,
         onValueChange = { onValueChange(it, AccountInputType.EMAIL) },
@@ -51,7 +53,7 @@ fun NameTextField(
     enabled: Boolean,
 ) {
     PuppyTextField(
-        labelText = "Name",
+        labelText = stringResource(R.string.name),
         value = userName,
         enabled = enabled,
         onValueChange = { onValueChange(it, AccountInputType.NAME) },
@@ -72,7 +74,7 @@ fun PasswordTextField(
     enabled: Boolean,
 ) {
     PuppyTextField(
-        labelText = "Password",
+        labelText = stringResource(R.string.password),
         value = userPassword,
         onValueChange = { onValueChange(it, AccountInputType.PASSWORD) },
         isError = userPasswordInputState.inputHasErrors,

@@ -21,10 +21,10 @@ fun ApplicationNameLabel() {
                     fontWeight = FontWeight.Black
                 )
             ) {
-                append(stringResource(R.string.app_name_1))
+                append(stringResource(R.string.app_name_part_1))
             }
             withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.secondary)) {
-                append(stringResource(R.string.app_name_2))
+                append(stringResource(R.string.app_name_part_2))
             }
             withStyle(style = SpanStyle(fontSize = MaterialTheme.typography.bodyMedium.fontSize)) {
                 append("©")

@@ -78,7 +78,7 @@ fun LoginLayout(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 0.dp, top = 16.dp),
-            text = "Welcome Back!",
+            text = stringResource(R.string.login_layout_title),
             style = MaterialTheme.typography.titleLarge.copy(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold
@@ -88,7 +88,7 @@ fun LoginLayout(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp),
-            text = "Continue your puppy journey",
+            text = stringResource(R.string.login_layout_subtitle),
             style = MaterialTheme.typography.bodyLarge.copy(
                 textAlign = TextAlign.Center,
             )
@@ -115,7 +115,7 @@ fun LoginLayout(
             )
         } else {
             PuppyPrimaryButton(
-                buttonText = stringResource(id = R.string.sign_in),
+                buttonText = stringResource(id = R.string.sign_in_button_text),
                 onClick = onSignInClick
             )
         }
@@ -141,7 +141,7 @@ fun SignUpLayout(
         Text(
             modifier = Modifier
                 .fillMaxWidth(),
-            text = "Great choice!",
+            text = stringResource(R.string.signup_layout_title),
             style = MaterialTheme.typography.titleLarge.copy(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold
@@ -151,7 +151,7 @@ fun SignUpLayout(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp),
-            text = "Let us know more about you",
+            text = stringResource(R.string.sign_up_layout_subtitle),
             style = MaterialTheme.typography.bodyLarge.copy(
                 textAlign = TextAlign.Center,
             )
@@ -175,7 +175,7 @@ fun SignUpLayout(
 
         )
         PuppyPrimaryButton(
-            buttonText = stringResource(id = R.string.get_started),
+            buttonText = stringResource(id = R.string.get_started_button_text),
             onClick = onGetStartedClick
         )
     }

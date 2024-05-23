@@ -28,7 +28,7 @@ fun GetStartedButton(onClick: () -> Unit) {
         contentPadding = PaddingValues(16.dp)
     ) {
         Text(
-            text = stringResource(R.string.get_started),
+            text = stringResource(R.string.get_started_button_text),
             style = MaterialTheme.typography.bodyLarge.copy(
                 textAlign = TextAlign.Center,
                 fontSize = 18.sp,
@@ -55,7 +55,7 @@ fun SignInButton(onClick: () -> Unit) {
         modifier = Modifier.padding(bottom = 15.dp)
     ) {
         Text(
-            text = stringResource(R.string.sign_in),
+            text = stringResource(R.string.sign_in_button_text),
             style = MaterialTheme.typography.bodyLarge.copy(
                 textAlign = TextAlign.Center
             ),
