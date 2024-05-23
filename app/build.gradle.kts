@@ -69,9 +69,12 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.viewmodel.compose)
+    implementation(libs.navigation.compose)
+
 
 //    dependency injection
     implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation)
     kapt(libs.hilt.compiler)
 
 //    firebase dependencies
