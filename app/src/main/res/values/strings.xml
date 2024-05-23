@@ -15,4 +15,7 @@
     <string name="email" translatable="false">Email</string>
     <string name="authentication_error">The combination of email and password is incorrect</string>
     <string name="generic_error">An unexpected error has occurred</string>
+    <string name="all_inputs_must_be_filled">All inputs must be filled</string>
+    <string name="email_format_error">Email format is incorrect</string>
+    <string name="password_error">Password must have at least 6 characters</string>
 </resources>

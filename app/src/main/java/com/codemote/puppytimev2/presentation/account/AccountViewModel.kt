@@ -1,10 +1,12 @@
 package com.codemote.puppytimev2.presentation.account
 
+import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.codemote.puppytimev2.R
 import com.codemote.puppytimev2.common.AuthenticationError
 import com.codemote.puppytimev2.common.SuccessAuthRemote
 import com.codemote.puppytimev2.common.UnknownError
@@ -18,7 +20,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AccountViewModel @Inject constructor(private val authRepository: AuthRepository) :
+class AccountViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+    private val appContext: Application
+) :
     ViewModel() {
     private val _uiState = MutableStateFlow(AccountUiState())
     val uiState: StateFlow<AccountUiState> = _uiState.asStateFlow()
@@ -51,14 +56,15 @@ class AccountViewModel @Inject constructor(private val authRepository: AuthRepos
         _uiState.update {
             it.copy(
                 userEmailInputState = InputState(),
-                userPasswordInputState = InputState()
+                userPasswordInputState = InputState(),
+                accountScreenError = null
             )
         }
     }
 
     fun onInputChange(value: String, accountInputType: AccountInputType) {
-        if (_uiState.value.unKnownError !== null) {
-            _uiState.update { it.copy(unKnownError = null) }
+        if (_uiState.value.accountScreenError !== null) {
+            _uiState.update { it.copy(accountScreenError = null) }
         }
         when (accountInputType) {
             AccountInputType.EMAIL -> {
@@ -69,7 +75,7 @@ class AccountViewModel @Inject constructor(private val authRepository: AuthRepos
                             InputState(
                                 inputHasErrors = !android.util.Patterns.EMAIL_ADDRESS.matcher(value)
                                     .matches(),
-                                inputErrorMessage = "Email format is incorrect"
+                                inputErrorMessage = appContext.getString(R.string.email_format_error)
                             )
                         } else {
                             InputState()
@@ -85,7 +91,7 @@ class AccountViewModel @Inject constructor(private val authRepository: AuthRepos
                         userPasswordInputState = if (value.isNotEmpty()) {
                             InputState(
                                 inputHasErrors = value.length < 6,
-                                inputErrorMessage = "Password must have at least 6 characters"
+                                inputErrorMessage = appContext.getString(R.string.password_error)
                             )
                         } else {
                             InputState()
@@ -99,6 +105,10 @@ class AccountViewModel @Inject constructor(private val authRepository: AuthRepos
     }
 
     fun authenticateUser(onSuccessfulAuthentication: () -> Unit) {
+        if (userEmail.isEmpty() || userPassword.isEmpty()) {
+            _uiState.update { it.copy(accountScreenError = appContext.getString(R.string.all_inputs_must_be_filled)) }
+            return
+        }
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             when (val result = authRepository.authenticateUser(userEmail, userPassword)) {
@@ -120,7 +130,7 @@ class AccountViewModel @Inject constructor(private val authRepository: AuthRepos
                 is UnknownError -> {
                     _uiState.update {
                         it.copy(
-                            unKnownError = result.message
+                            accountScreenError = result.message
                         )
                     }
                 }
@@ -130,6 +140,10 @@ class AccountViewModel @Inject constructor(private val authRepository: AuthRepos
     }
 
     fun createUser(onSuccessfulUserCreation: () -> Unit) {
+        if (userEmail.isEmpty() || userPassword.isEmpty() || userName.isEmpty()) {
+            _uiState.update { it.copy(accountScreenError = appContext.getString(R.string.all_inputs_must_be_filled)) }
+            return
+        }
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             when (authRepository.createUser(
@@ -144,7 +158,7 @@ class AccountViewModel @Inject constructor(private val authRepository: AuthRepos
                 else -> {
                     _uiState.update {
                         it.copy(
-                            unKnownError = "An unknown error has happened"
+                            accountScreenError = appContext.getString(R.string.generic_error)
                         )
                     }
                 }

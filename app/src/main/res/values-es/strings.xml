@@ -12,4 +12,5 @@
     <string name="name">Nombre</string>
     <string name="authentication_error">La combinación de contraseña e email es incorrecta</string>
     <string name="generic_error">Ha ocurrido un error</string>
+    <string name="all_inputs_must_be_filled">Todos los campos son requeridos</string>
 </resources>
