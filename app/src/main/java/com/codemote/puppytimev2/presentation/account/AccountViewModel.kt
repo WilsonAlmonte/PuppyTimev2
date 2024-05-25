@@ -7,9 +7,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codemote.puppytimev2.R
-import com.codemote.puppytimev2.common.AuthenticationError
-import com.codemote.puppytimev2.common.SuccessAuthRemote
-import com.codemote.puppytimev2.common.UnknownError
+import com.codemote.puppytimev2.core.AuthenticationError
+import com.codemote.puppytimev2.core.SuccessAuthRemote
+import com.codemote.puppytimev2.core.UnknownError
 import com.codemote.puppytimev2.domain.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,8 +23,8 @@ import javax.inject.Inject
 class AccountViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val appContext: Application
-) :
-    ViewModel() {
+) : ViewModel() {
+
     private val _uiState = MutableStateFlow(AccountUiState())
     val uiState: StateFlow<AccountUiState> = _uiState.asStateFlow()
 

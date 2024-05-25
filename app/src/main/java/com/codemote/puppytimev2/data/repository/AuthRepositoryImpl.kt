@@ -2,11 +2,11 @@ package com.codemote.puppytimev2.data.repository
 
 import android.app.Application
 import com.codemote.puppytimev2.R
-import com.codemote.puppytimev2.common.AuthRemoteResult
-import com.codemote.puppytimev2.common.AuthState
-import com.codemote.puppytimev2.common.AuthenticationError
-import com.codemote.puppytimev2.common.SuccessAuthRemote
-import com.codemote.puppytimev2.common.UnknownError
+import com.codemote.puppytimev2.core.AuthRemoteResult
+import com.codemote.puppytimev2.core.AuthState
+import com.codemote.puppytimev2.core.AuthenticationError
+import com.codemote.puppytimev2.core.SuccessAuthRemote
+import com.codemote.puppytimev2.core.UnknownError
 import com.codemote.puppytimev2.domain.repository.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
@@ -14,14 +14,11 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.userProfileChangeRequest
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
@@ -53,7 +50,7 @@ class AuthRepositoryImpl(
         }
     }
 
-    override fun getCurrentUser(viewModelScope: CoroutineScope): StateFlow<FirebaseUser?> =
+    override fun getCurrentUser(): Flow<FirebaseUser?> =
         callbackFlow {
             val currentUserListener = AuthStateListener {
                 trySend(it.currentUser)
@@ -63,9 +60,8 @@ class AuthRepositoryImpl(
                 firebaseAuth.removeAuthStateListener(currentUserListener)
             }
         }.flowOn(ioDispatcher)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), firebaseAuth.currentUser)
 
-    override fun getSignedState(viewModelScope: CoroutineScope): StateFlow<AuthState> =
+    override fun getSignedState(): Flow<AuthState> =
         callbackFlow {
             val authStateListener = AuthStateListener {
                 trySend(AuthState.LOADING)
@@ -78,7 +74,7 @@ class AuthRepositoryImpl(
                 firebaseAuth.removeAuthStateListener(authStateListener)
             }
         }.flowOn(ioDispatcher)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), AuthState.LOADING)
+
 
     override suspend fun createUser(
         email: String,

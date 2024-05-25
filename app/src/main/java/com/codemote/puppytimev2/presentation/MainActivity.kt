@@ -11,9 +11,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
-import com.codemote.puppytimev2.common.AuthState
-import com.codemote.puppytimev2.common.constants.ACCOUNT_SCREEN
-import com.codemote.puppytimev2.common.constants.HOME_SCREEN
+import com.codemote.puppytimev2.core.AuthState
+import com.codemote.puppytimev2.core.constants.ACCOUNT_SCREEN
+import com.codemote.puppytimev2.core.constants.HOME_SCREEN
 import com.codemote.puppytimev2.presentation.loading.LoadingScreen
 import com.codemote.puppytimev2.ui.navigation.NavigationGraph
 import com.codemote.puppytimev2.ui.theme.PuppyTimeV2Theme

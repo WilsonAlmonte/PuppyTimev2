@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 private fun PuppyButton(buttonText: String, onClick: () -> Unit) {
     ElevatedButton(
-        onClick = { onClick() },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(),
         shape = MaterialTheme.shapes.medium,
         contentPadding = PaddingValues(16.dp),
@@ -32,5 +32,5 @@ private fun PuppyButton(buttonText: String, onClick: () -> Unit) {
 
 @Composable
 fun PuppyPrimaryButton(buttonText: String, onClick: () -> Unit) {
-    PuppyButton(buttonText = buttonText, onClick = { onClick() })
+    PuppyButton(buttonText = buttonText, onClick = onClick)
 }

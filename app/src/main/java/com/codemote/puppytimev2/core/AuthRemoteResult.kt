@@ -1,4 +1,4 @@
-package com.codemote.puppytimev2.common
+package com.codemote.puppytimev2.core
 
 sealed interface AuthRemoteResult : RemoteResult<Boolean>
 data object SuccessAuthRemote : AuthRemoteResult

@@ -5,9 +5,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.codemote.puppytimev2.common.constants.ACCOUNT_SCREEN
-import com.codemote.puppytimev2.common.constants.HOME_SCREEN
-import com.codemote.puppytimev2.common.constants.LOADING_SCREEN
+import com.codemote.puppytimev2.core.constants.ACCOUNT_SCREEN
+import com.codemote.puppytimev2.core.constants.HOME_SCREEN
+import com.codemote.puppytimev2.core.constants.LOADING_SCREEN
 import com.codemote.puppytimev2.presentation.account.AccountScreen
 import com.codemote.puppytimev2.presentation.home.HomeScreen
 import com.codemote.puppytimev2.presentation.loading.LoadingScreen

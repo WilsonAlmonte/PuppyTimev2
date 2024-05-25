@@ -21,7 +21,7 @@ fun PuppyTextField(
     onValueChange: (String) -> Unit,
     isError: Boolean = false,
     errorMessage: String = "",
-    leadingIcon: @Composable() (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     enabled: Boolean = true,
     visualTransformation: VisualTransformation = VisualTransformation.None
@@ -50,8 +50,6 @@ fun PuppyTextField(
         modifier = modifier
             .fillMaxWidth(),
         value = value,
-        onValueChange = {
-            onValueChange(it)
-        }
+        onValueChange = onValueChange
     )
 }
