@@ -24,8 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.codemote.puppytimev2.R
-import com.codemote.puppytimev2.presentation.account.AccountInputType
-import com.codemote.puppytimev2.presentation.account.InputState
+import com.codemote.puppytimev2.presentation.account.AccountViewModel
 import com.codemote.puppytimev2.ui.atoms.PuppyPrimaryButton
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,7 +32,6 @@ import com.codemote.puppytimev2.ui.atoms.PuppyPrimaryButton
 fun AccountBottomSheet(
     showBottomSheet: Boolean,
     onDismiss: () -> Unit,
-    unknownError: String,
     sheetState: SheetState,
     content: @Composable () -> Unit
 ) {
@@ -61,13 +59,6 @@ fun AccountBottomSheet(
                     .fillMaxSize(),
             ) {
                 content()
-                if (unknownError.isNotEmpty()) {
-                    Text(
-                        text = unknownError,
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
-                }
             }
         }
     }
@@ -76,11 +67,10 @@ fun AccountBottomSheet(
 @Composable
 fun LoginLayout(
     userEmail: String,
-    userEmailInputState: InputState,
-    userPasswordInputState: InputState,
+    userEmailInputState: AccountViewModel.InputState,
+    userPasswordInputState: AccountViewModel.InputState,
     userPassword: String,
-    onValueChange: (String, AccountInputType) -> Unit,
-    onSignInClick: () -> Unit,
+    onEvent: (AccountViewModel.AccountEvent) -> Unit,
     operationIsLoading: Boolean
 ) {
     Text(
@@ -106,13 +96,13 @@ fun LoginLayout(
         enabled = !operationIsLoading,
         userEmailInputState = userEmailInputState,
         userEmail = userEmail,
-        onValueChange = onValueChange
+        onValueChange = { onEvent(AccountViewModel.AccountEvent.OnEmailInputChange(it)) }
     )
     PasswordTextField(
         enabled = !operationIsLoading,
         userPasswordInputState = userPasswordInputState,
         userPassword = userPassword,
-        onValueChange = onValueChange
+        onValueChange = { onEvent(AccountViewModel.AccountEvent.OnPasswordInputChange(it)) }
     )
     if (operationIsLoading) {
         CircularProgressIndicator(
@@ -125,7 +115,7 @@ fun LoginLayout(
     } else {
         PuppyPrimaryButton(
             buttonText = stringResource(id = R.string.sign_in_button_text),
-            onClick = onSignInClick
+            onClick = { onEvent(AccountViewModel.AccountEvent.AuthenticateUser) }
         )
     }
 }
@@ -134,11 +124,10 @@ fun LoginLayout(
 fun SignUpLayout(
     userEmail: String,
     userPassword: String,
-    userEmailInputState: InputState,
-    userPasswordInputState: InputState,
+    userEmailInputState: AccountViewModel.InputState,
+    userPasswordInputState: AccountViewModel.InputState,
     userName: String,
-    onValueChange: (String, AccountInputType) -> Unit,
-    onGetStartedClick: () -> Unit,
+    onEvent: (AccountViewModel.AccountEvent) -> Unit,
     operationIsLoading: Boolean
 ) {
 
@@ -162,24 +151,24 @@ fun SignUpLayout(
     )
     NameTextField(
         userName = userName,
-        onValueChange = onValueChange,
+        onValueChange = { onEvent(AccountViewModel.AccountEvent.OnNameInputChange(it)) },
         enabled = !operationIsLoading
     )
     EmailTextField(
         userEmailInputState = userEmailInputState,
         userEmail = userEmail,
-        onValueChange = onValueChange,
+        onValueChange = { onEvent(AccountViewModel.AccountEvent.OnEmailInputChange(it)) },
         enabled = !operationIsLoading
     )
     PasswordTextField(
         userPasswordInputState = userPasswordInputState,
         userPassword = userPassword,
-        onValueChange = onValueChange,
+        onValueChange = { onEvent(AccountViewModel.AccountEvent.OnPasswordInputChange(it)) },
         enabled = !operationIsLoading
 
     )
     PuppyPrimaryButton(
         buttonText = stringResource(id = R.string.get_started_button_text),
-        onClick = onGetStartedClick
+        onClick = { onEvent(AccountViewModel.AccountEvent.OnCreateUser) }
     )
 }

@@ -15,22 +15,21 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.codemote.puppytimev2.R
-import com.codemote.puppytimev2.presentation.account.AccountInputType
-import com.codemote.puppytimev2.presentation.account.InputState
+import com.codemote.puppytimev2.presentation.account.AccountViewModel
 import com.codemote.puppytimev2.ui.atoms.PuppyTextField
 
 @Composable
 fun EmailTextField(
-    userEmailInputState: InputState,
+    userEmailInputState: AccountViewModel.InputState,
     userEmail: String,
-    onValueChange: (String, AccountInputType) -> Unit,
+    onValueChange: (String) -> Unit,
     enabled: Boolean,
 ) {
     PuppyTextField(
         labelText = stringResource(R.string.email),
         value = userEmail,
         enabled = enabled,
-        onValueChange = { onValueChange(it, AccountInputType.EMAIL) },
+        onValueChange = { onValueChange(it) },
         isError = userEmailInputState.inputHasErrors,
         errorMessage = userEmailInputState.inputErrorMessage,
         keyboardOptions = KeyboardOptions.Default.copy(
@@ -49,14 +48,14 @@ fun EmailTextField(
 @Composable
 fun NameTextField(
     userName: String,
-    onValueChange: (String, AccountInputType) -> Unit,
+    onValueChange: (String) -> Unit,
     enabled: Boolean,
 ) {
     PuppyTextField(
         labelText = stringResource(R.string.name),
         value = userName,
         enabled = enabled,
-        onValueChange = { onValueChange(it, AccountInputType.NAME) },
+        onValueChange = { onValueChange(it) },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.AccountBox,
@@ -68,15 +67,15 @@ fun NameTextField(
 
 @Composable
 fun PasswordTextField(
-    userPasswordInputState: InputState,
+    userPasswordInputState: AccountViewModel.InputState,
     userPassword: String,
-    onValueChange: (String, AccountInputType) -> Unit,
+    onValueChange: (String) -> Unit,
     enabled: Boolean,
 ) {
     PuppyTextField(
         labelText = stringResource(R.string.password),
         value = userPassword,
-        onValueChange = { onValueChange(it, AccountInputType.PASSWORD) },
+        onValueChange = { onValueChange(it) },
         isError = userPasswordInputState.inputHasErrors,
         errorMessage = userPasswordInputState.inputErrorMessage,
         visualTransformation = PasswordVisualTransformation(),

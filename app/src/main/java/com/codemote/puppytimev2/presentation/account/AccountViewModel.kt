@@ -37,7 +37,34 @@ class AccountViewModel @Inject constructor(
     var userPassword by mutableStateOf("")
         private set
 
-    fun toggleAccountBottomSheet(sheetType: AccountBottomSheetType = AccountBottomSheetType.NONE) {
+    fun processEvent(event: AccountEvent) {
+        when (event) {
+            AccountEvent.AuthenticateUser -> authenticateUser()
+            AccountEvent.OnCreateUser -> createUser()
+            is AccountEvent.OnEmailInputChange -> onInputChange(
+                event.value,
+                AccountEvent.AccountInputType.EMAIL
+            )
+
+            is AccountEvent.OnNameInputChange -> onInputChange(
+                event.value,
+                AccountEvent.AccountInputType.NAME
+            )
+
+            is AccountEvent.OnPasswordInputChange -> onInputChange(
+                event.value,
+                AccountEvent.AccountInputType.PASSWORD
+            )
+
+            is AccountEvent.ShowSignUpBottomSheet -> toggleAccountBottomSheet(AccountBottomSheetType.SIGN_UP)
+            is AccountEvent.ShowLoginBottomSheet -> toggleAccountBottomSheet(AccountBottomSheetType.LOGIN)
+            is AccountEvent.HideAccountBottomSheet -> toggleAccountBottomSheet()
+            AccountEvent.ConsumeEffect -> _uiState.update { it.copy(effect = null) }
+
+        }
+    }
+
+    private fun toggleAccountBottomSheet(sheetType: AccountBottomSheetType = AccountBottomSheetType.NONE) {
         if (uiState.value.showAccountBottomSheet) {
             resetInputs()
         }
@@ -57,17 +84,13 @@ class AccountViewModel @Inject constructor(
             it.copy(
                 userEmailInputState = InputState(),
                 userPasswordInputState = InputState(),
-                accountScreenError = null
             )
         }
     }
 
-    fun onInputChange(value: String, accountInputType: AccountInputType) {
-        if (_uiState.value.accountScreenError !== null) {
-            _uiState.update { it.copy(accountScreenError = null) }
-        }
+    private fun onInputChange(value: String, accountInputType: AccountEvent.AccountInputType) {
         when (accountInputType) {
-            AccountInputType.EMAIL -> {
+            AccountEvent.AccountInputType.EMAIL -> {
                 userEmail = value
                 _uiState.update {
                     it.copy(
@@ -84,7 +107,7 @@ class AccountViewModel @Inject constructor(
                 }
             }
 
-            AccountInputType.PASSWORD -> {
+            AccountEvent.AccountInputType.PASSWORD -> {
                 userPassword = value
                 _uiState.update {
                     it.copy(
@@ -100,20 +123,20 @@ class AccountViewModel @Inject constructor(
                 }
             }
 
-            AccountInputType.NAME -> userName = value
+            AccountEvent.AccountInputType.NAME -> userName = value
         }
     }
 
-    fun authenticateUser(onSuccessfulAuthentication: () -> Unit) {
+    private fun authenticateUser() {
         if (userEmail.isEmpty() || userPassword.isEmpty()) {
-            _uiState.update { it.copy(accountScreenError = appContext.getString(R.string.all_inputs_must_be_filled)) }
+            _uiState.update { it.copy(effect = AccountEffect.ShowToast(appContext.getString(R.string.all_inputs_must_be_filled))) }
             return
         }
         _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             when (val result = authRepository.authenticateUser(userEmail, userPassword)) {
                 SuccessAuthRemote -> {
-                    onSuccessfulAuthentication()
+                    _uiState.update { it.copy(effect = AccountEffect.ShowToast("Welcome Back")) }
                 }
 
                 is AuthenticationError -> {
@@ -130,7 +153,9 @@ class AccountViewModel @Inject constructor(
                 is UnknownError -> {
                     _uiState.update {
                         it.copy(
-                            accountScreenError = result.message
+                            effect = AccountEffect.ShowToast(
+                                result.message
+                            )
                         )
                     }
                 }
@@ -139,9 +164,9 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun createUser(onSuccessfulUserCreation: () -> Unit) {
+    private fun createUser() {
         if (userEmail.isEmpty() || userPassword.isEmpty() || userName.isEmpty()) {
-            _uiState.update { it.copy(accountScreenError = appContext.getString(R.string.all_inputs_must_be_filled)) }
+            _uiState.update { it.copy(effect = AccountEffect.ShowToast(appContext.getString(R.string.all_inputs_must_be_filled))) }
             return
         }
         _uiState.update { it.copy(isLoading = true) }
@@ -152,13 +177,13 @@ class AccountViewModel @Inject constructor(
                 name = userName
             )) {
                 SuccessAuthRemote -> {
-                    onSuccessfulUserCreation()
+                    _uiState.update { it.copy(effect = AccountEffect.ShowToast("Welcome to PUPPY TIME")) }
                 }
 
                 else -> {
                     _uiState.update {
                         it.copy(
-                            accountScreenError = appContext.getString(R.string.generic_error)
+                            effect = AccountEffect.ShowToast(appContext.getString(R.string.generic_error))
                         )
                     }
                 }
@@ -166,8 +191,35 @@ class AccountViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = false) }
         }
     }
-}
 
-enum class AccountInputType {
-    EMAIL, PASSWORD, NAME
+    data class AccountUiState(
+        val showAccountBottomSheet: Boolean = false,
+        val accountBottomSheetType: AccountBottomSheetType = AccountBottomSheetType.NONE,
+        val userEmailInputState: InputState = InputState(),
+        val userPasswordInputState: InputState = InputState(),
+        val isLoading: Boolean = false,
+        val effect: AccountEffect? = null
+    )
+
+    sealed interface AccountEffect {
+        data class ShowToast(val message: String) : AccountEffect
+    }
+
+    sealed class AccountEvent {
+        data class OnEmailInputChange(val value: String) : AccountEvent()
+        data class OnPasswordInputChange(val value: String) : AccountEvent()
+        data class OnNameInputChange(val value: String) : AccountEvent()
+        data object ShowSignUpBottomSheet : AccountEvent()
+        data object ShowLoginBottomSheet : AccountEvent()
+        data object HideAccountBottomSheet : AccountEvent()
+        data object AuthenticateUser : AccountEvent()
+        data object OnCreateUser : AccountEvent()
+        data object ConsumeEffect : AccountEvent()
+        enum class AccountInputType {
+            EMAIL, PASSWORD, NAME
+        }
+
+    }
+
+    data class InputState(val inputHasErrors: Boolean = false, val inputErrorMessage: String = "")
 }

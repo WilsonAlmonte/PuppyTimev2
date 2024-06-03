@@ -6,8 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
@@ -27,12 +30,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val mainViewModel = hiltViewModel<MainViewModel>()
+            val snackbarHostState = remember { SnackbarHostState() }
             val userSignedState by mainViewModel.userSignedState.collectAsState()
             PuppyTimeV2Theme {
                 Scaffold(
+                    snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    NavigationGraph(navController = navController, modifier = Modifier.padding(it))
+                    NavigationGraph(
+                        navController = navController,
+                        modifier = Modifier.padding(it),
+                    )
                     when (userSignedState) {
                         AuthState.SIGNED_IN -> {
                             navController.navigate(HOME_SCREEN) {
