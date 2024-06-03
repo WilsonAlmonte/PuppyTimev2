@@ -6,40 +6,52 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
+import com.codemote.puppytimev2.core.AuthState
+import com.codemote.puppytimev2.core.constants.ACCOUNT_SCREEN
+import com.codemote.puppytimev2.core.constants.HOME_SCREEN
+import com.codemote.puppytimev2.presentation.loading.LoadingScreen
+import com.codemote.puppytimev2.ui.navigation.NavigationGraph
 import com.codemote.puppytimev2.ui.theme.PuppyTimeV2Theme
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
+            val mainViewModel = hiltViewModel<MainViewModel>()
+            val userSignedState by mainViewModel.userSignedState.collectAsState()
             PuppyTimeV2Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Scaffold(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    NavigationGraph(navController = navController, modifier = Modifier.padding(it))
+                    when (userSignedState) {
+                        AuthState.SIGNED_IN -> {
+                            navController.navigate(HOME_SCREEN) {
+                                popUpTo(navController.graph.id)
+                            }
+                        }
+
+                        AuthState.SIGNED_OUT -> {
+                            navController.navigate(ACCOUNT_SCREEN) {
+                                popUpTo(navController.graph.id)
+                            }
+                        }
+
+                        AuthState.LOADING -> {
+                            LoadingScreen()
+                        }
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PuppyTimeV2Theme {
-        Greeting("Android")
     }
 }
