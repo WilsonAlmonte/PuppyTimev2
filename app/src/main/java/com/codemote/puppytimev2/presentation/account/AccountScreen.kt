@@ -60,14 +60,6 @@ fun AccountScreen(
                 ).show()
             }
 
-            is AccountViewModel.AccountEffect.ShowToast -> {
-                Toast.makeText(
-                    context,
-                    (accountUiState.effect as AccountViewModel.AccountEffect.ShowToast).message,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
             null -> Unit
         }
         viewModel.processEvent(AccountViewModel.AccountEvent.ConsumeEffect)
