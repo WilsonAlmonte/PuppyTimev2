@@ -48,7 +48,7 @@ fun GetStartedButton(onClick: () -> Unit) {
 }
 
 @Composable
-fun SignInButton(onClick: () -> Unit) {
+fun LoginButton(onClick: () -> Unit) {
     FilledTonalButton(
         onClick = { onClick() },
         contentPadding = PaddingValues(16.dp),
